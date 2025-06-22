@@ -1,19 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { loginUser } from '../controllers/auth.controller';
 
 const router = Router();
 
 // Ruta de login
-router.post('/login', (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  // Lógica de autenticación aquí
-  res.json({ message: 'Login exitoso', user: { username } });
-});
+router.post('/login', loginUser);
 
-// Ruta de registro
-router.post('/register', (req: Request, res: Response) => {
-  const { username, password, email } = req.body;
-  // Lógica de registro aquí
-  res.status(201).json({ message: 'Usuario registrado con éxito', user: { username, email } });
-});
+// TODO: Implementar la ruta de registro
 
 export default router;
