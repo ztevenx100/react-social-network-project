@@ -3,7 +3,7 @@ import authRoutes from './routes/auth.routes';
 import postRoutes from './routes/posts.routes';
 
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware para parsear JSON
 app.use(express.json());

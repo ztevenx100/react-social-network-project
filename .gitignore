@@ -1,0 +1,29 @@
+# Dependencias
+# Ignora las carpetas node_modules en cualquier subdirectorio
+**/node_modules
+
+# Archivos de entorno
+# Nunca subas tus variables de entorno (contienen secretos)
+.env
+.env.*
+!/.env.example
+
+# Archivos de build
+# El código compilado o empaquetado no debe estar en el repositorio
+/dist
+/build
+/out
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos del editor/IDE
+.vscode/
+.idea/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
