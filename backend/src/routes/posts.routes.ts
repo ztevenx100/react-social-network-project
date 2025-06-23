@@ -4,6 +4,7 @@ import {
   getAllPosts,
   likePost,
   deletePost,
+  updatePost,
 } from '../controllers/posts.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
@@ -23,5 +24,8 @@ router.patch('/:id/like', likePost);
 
 // DELETE /api/posts/:id -> Eliminar una publicación
 router.delete('/:id', deletePost);
+
+// PATCH /api/posts/:id -> Editar una publicación
+router.patch('/:id', updatePost);
 
 export default router;

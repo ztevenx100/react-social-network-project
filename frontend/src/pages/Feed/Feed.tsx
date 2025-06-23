@@ -26,7 +26,14 @@ const Feed: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
-  const { token, user } = useAuthStore(); // Obtener el token y el usuario para saber si el usuario está autenticado
+  const { token, user } = useAuthStore();
+
+  // --- Estados para el modal de edición ---
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedContent, setEditedContent] = useState('');
+  // -----------------------------------------
 
   // Obtener los posts del backend
   useEffect(() => {
@@ -119,6 +126,39 @@ const Feed: React.FC = () => {
     }
   };
 
+  // --- Funciones para editar ---
+  const handleEditClick = (post: Post) => {
+    setEditingPost(post);
+    setEditedTitle(post.title);
+    setEditedContent(post.content);
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditingPost(null);
+  };
+
+  const handleUpdatePost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPost) return;
+
+    try {
+      const response = await apiClient.patch<Post>(`/posts/${editingPost.id}`, {
+        title: editedTitle,
+        content: editedContent,
+      });
+
+      // Actualizar el post en el estado local
+      setPosts(posts.map(p => (p.id === editingPost.id ? response.data : p)));
+      handleCancelEdit(); // Cerrar el modal
+    } catch (err) {
+      console.error('Error al actualizar la publicación:', err);
+      alert('No se pudo actualizar la publicación.');
+    }
+  };
+  // -----------------------------
+
   if (loading) return <div className="feed-container">Cargando publicaciones...</div>;
   if (error) return <div className="feed-container error-message">{error}</div>;
 
@@ -151,6 +191,37 @@ const Feed: React.FC = () => {
         </form>
       )}
 
+      {/* --- Modal de Edición --- */}
+      {isEditing && editingPost && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Editar Publicación</h2>
+            <form onSubmit={handleUpdatePost}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <textarea
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" onClick={handleCancelEdit} className="cancel-button">Cancelar</button>
+                <button type="submit" className="submit-post-button">Guardar Cambios</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* ----------------------- */}
+
       <div className="posts-list">
         {posts.map(post => (
           <div key={post.id} className="post-card">
@@ -166,11 +237,15 @@ const Feed: React.FC = () => {
               <button onClick={() => handleLike(post.id)} className="like-button">
                 ❤️ Me gusta ({post.likes || 0})
               </button>
-              {/* Condición para mostrar el botón de eliminar */}
               {user && user.id === post.authorId && (
-                <button onClick={() => handleDelete(post.id)} className="delete-button">
-                  🗑️ Eliminar
-                </button>
+                <>
+                  <button onClick={() => handleEditClick(post)} className="edit-button">
+                    ✏️ Editar
+                  </button>
+                  <button onClick={() => handleDelete(post.id)} className="delete-button">
+                    🗑️ Eliminar
+                  </button>
+                </>
               )}
             </div>
           </div>

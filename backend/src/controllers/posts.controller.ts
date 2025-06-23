@@ -166,3 +166,51 @@ export const deletePost = async (req: AuthRequest, res: Response): Promise<void>
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
+
+// Añadir esta nueva función
+export const updatePost = async (req: AuthRequest, res: Response): Promise<void> => {
+  const postId = req.params.id;
+  const userId = req.userId;
+  const { title, content } = req.body;
+
+  if (!userId) {
+    res.status(401).json({ message: 'No autorizado' });
+    return;
+  }
+
+  if (!title || !content) {
+    res.status(400).json({ message: 'El título y el contenido son obligatorios' });
+    return;
+  }
+
+  try {
+    const post = await client.post.findUnique({
+      where: { id: parseInt(postId, 10) },
+    });
+
+    if (!post) {
+      res.status(404).json({ message: 'Publicación no encontrada' });
+      return;
+    }
+
+    if (post.authorId !== userId) {
+      res.status(403).json({ message: 'No tienes permiso para editar esta publicación' });
+      return;
+    }
+
+    const updatedPost = await client.post.update({
+      where: { id: parseInt(postId, 10) },
+      data: { title, content },
+      include: { // Devolvemos el post con los datos del autor para el frontend
+        author: {
+          select: { name: true, lastname: true, alias: true },
+        },
+      },
+    });
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    console.error('Error al actualizar la publicación:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};

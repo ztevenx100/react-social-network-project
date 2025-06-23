@@ -88,14 +88,16 @@ Si prefieres no usar Docker, puedes ejecutar cada servicio por separado.
 
 La API base se encuentra en `/api`.
 
-| Método | Endpoint              | Descripción                                     | Requiere Auth |
-| :----- | :-------------------- | :---------------------------------------------- | :------------ |
-| `POST` | `/auth/register`      | Registra un nuevo usuario.                      | No            |
-| `POST` | `/auth/login`         | Inicia sesión y devuelve un token JWT.          | No            |
-| `GET`  | `/auth/profile`       | Obtiene el perfil del usuario autenticado.      | Sí            |
-| `GET`  | `/posts`              | Obtiene todas las publicaciones.                | Sí            |
-| `POST` | `/posts`              | Crea una nueva publicación.                     | Sí            |
-| `PATCH`| `/posts/:id/like`     | Incrementa los "me gusta" de una publicación.   | Sí            |
+| Método  | Endpoint              | Descripción                                     | Requiere Auth |
+| :------ | :-------------------- | :---------------------------------------------- | :------------ |
+| `POST`  | `/auth/register`      | Registra un nuevo usuario.                      | No            |
+| `POST`  | `/auth/login`         | Inicia sesión y devuelve un token JWT.          | No            |
+| `GET`   | `/auth/profile`       | Obtiene el perfil del usuario autenticado.      | Sí            |
+| `GET`   | `/posts`              | Obtiene todas las publicaciones.                | Sí            |
+| `POST`  | `/posts`              | Crea una nueva publicación.                     | Sí            |
+| `PATCH` | `/posts/:id/like`     | Incrementa los "me gusta" de una publicación.   | Sí            |
+| `PATCH` | `/posts/:id`          | Edita una publicación propia.                   | Sí            |
+| `DELETE`| `/posts/:id`          | Elimina una publicación propia.                 | Sí            |
 
 ## Scripts Disponibles
 
