@@ -1,25 +1,30 @@
 import { Response } from 'express';
-import client from '../lib/client';
+import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth.middleware';
 
-export const createPost = async (req: AuthRequest, res: Response) => {
+const prisma = new PrismaClient();
+
+export const createPost = async (req: AuthRequest, res: Response): Promise<void> => {
   const { title, content } = req.body;
-  const userId = req.user?.userId;
+  const authorId = req.userId;
 
   if (!title || !content) {
-    return res.status(400).json({ message: 'El título y el contenido son requeridos' });
+    res.status(400).json({ message: 'El título y el contenido son requeridos' });
+    return;
   }
 
-  if (!userId) {
-    return res.status(401).json({ message: 'Usuario no autenticado' });
+  if (!authorId) {
+    // Esta validación es una salvaguarda; el middleware ya debería haber prevenido esto.
+    res.status(403).json({ message: 'Acción no permitida. Usuario no autenticado.' });
+    return;
   }
 
   try {
-    const newPost = await client.post.create({
+    const newPost = await prisma.post.create({
       data: {
         title,
         content,
-        authorId: userId,
+        authorId: authorId,
       },
     });
 

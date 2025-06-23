@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -15,8 +15,11 @@ async function main() {
     update: {},
     create: {
       email: 'test@example.com',
-      name: 'Usuario de Prueba',
       password: hashedPassword,
+      name: 'Usuario',
+      lastname: 'DePrueba',
+      birthdate: new Date('1995-11-17T03:24:00'),
+      alias: 'testuser',
     },
   });
 
@@ -25,14 +28,13 @@ async function main() {
   // Puedes añadir más datos aquí, por ejemplo, posts para el usuario de prueba
   const post1 = await prisma.post.create({
     data: {
-      title: 'Este es mi primer post',
+      title: 'Mi primer post', // Añadido el campo title que faltaba
       content: 'Hola a todos, ¡bienvenidos a mi nuevo post! Esto fue creado desde el seeder.',
-      published: true,
       authorId: user1.id,
     },
   });
 
-  console.log(`Creado post de prueba: "${post1.title}"`);
+  console.log(`Creado post de prueba para el usuario: "${user1.alias}"`);
 
   console.log('Sembrado completado.');
 }
@@ -40,7 +42,7 @@ async function main() {
 main()
   .catch((e) => {
     console.error(e);
-    process.exit(1);
+    throw e;
   })
   .finally(async () => {
     await prisma.$disconnect();
