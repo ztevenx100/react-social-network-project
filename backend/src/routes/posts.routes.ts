@@ -1,20 +1,23 @@
-import { Router, Request, Response } from 'express';
-import { createPost } from '../controllers/posts.controller';
+import { Router } from 'express';
+import {
+  createPost,
+  getPosts,
+  likePost,
+} from '../controllers/posts.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
 
-// Obtener todos los posts
-router.get('/', (req: Request, res: Response) => {
-  // Lógica para obtener posts
-  res.json({ posts: [] });
-});
+// Aplica el middleware de autenticación a TODAS las rutas de este archivo
+router.use(authMiddleware);
 
-// Crear un nuevo post (ruta protegida)
-router.post('/', authMiddleware, (req: Request, res: Response) => {
-  const { content } = req.body;
-  // Lógica para crear un post
-  res.status(201).json({ message: 'Post creado', post: { content } });
-});
+// POST /api/posts -> Crear una nueva publicación
+router.post('/', createPost);
+
+// GET /api/posts -> Listar todas las publicaciones de otros usuarios
+router.get('/', getPosts);
+
+// PATCH /api/posts/:id/like -> Dar like a una publicación
+router.patch('/:id/like', likePost);
 
 export default router;

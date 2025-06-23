@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { AuthRequest } from '../middleware/auth.middleware';
 import client from '../lib/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -42,6 +43,38 @@ export const loginUser = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error('Error en el login:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+// Obtener el perfil del usuario autenticado
+export const getProfile = async (req: AuthRequest, res: Response): Promise<void> => {
+  const userId = req.userId;
+
+  if (!userId) {
+    res.status(401).json({ message: 'No autorizado' });
+    return;
+  }
+
+  try {
+    const user = await client.user.findUnique({
+      where: { id: userId },
+      select: {
+        name: true,
+        lastname: true,
+        birthdate: true,
+        alias: true,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error al obtener el perfil:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
