@@ -112,3 +112,4 @@ La API base se encuentra en `/api`.
 -   `npm run dev`: Inicia el servidor de desarrollo con hot-reload.
 -   `npm start`: Inicia el servidor en modo producción (requiere `npm run build` primero).
 -   `npm run lint`: Ejecuta el linter para detectar errores.
+-   `npm test`: Ejecuta las pruebas automatizadas con Jest.

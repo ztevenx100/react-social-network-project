@@ -1,9 +1,9 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import authRoutes from './routes/auth.routes';
-import postsRoutes from './routes/posts.routes'; // Importar las rutas de posts
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
+import authRoutes from './routes/auth.routes';
+import postsRoutes from './routes/posts.routes';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3001;
@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Rutas de la aplicación
 app.use('/api/auth', authRoutes);
-app.use('/api/posts', postsRoutes); // Usar las rutas de posts con el prefijo /api/posts
+app.use('/api/posts', postsRoutes);
 
 // Ruta para la documentación de la API
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -84,7 +84,12 @@ app.get('/', (req: Request, res: Response) => {
   `);
 });
 
-// Iniciar el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Iniciar el servidor solo si no estamos en modo de prueba
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    console.log(`📚 API Documentation available at http://localhost:${PORT}/api-docs`);
+  });
+}
+
+export default app;
