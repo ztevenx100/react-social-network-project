@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import authRoutes from './routes/auth.routes';
-import postRoutes from './routes/posts.routes';
+import postsRoutes from './routes/posts.routes'; // Importar las rutas de posts
 
 const app: Application = express();
 const PORT = process.env.PORT || 3001;
@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 
 // Rutas de la aplicación
-app.use('/auth', authRoutes);
-app.use('/posts', postRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/posts', postsRoutes); // Usar las rutas de posts con el prefijo /api/posts
 
 // Ruta de bienvenida
 app.get('/', (req: Request, res: Response) => {
