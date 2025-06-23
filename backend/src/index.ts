@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import postsRoutes from './routes/posts.routes'; // Importar las rutas de posts
 import swaggerUi from 'swagger-ui-express';
@@ -6,6 +7,9 @@ import swaggerDocument from '../swagger.json';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3001;
+
+// Habilitar CORS para todas las rutas
+app.use(cors());
 
 // Middleware para parsear JSON
 app.use(express.json());

@@ -17,9 +17,11 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.10.1",
+    "@types/cors": "^2.8.19",
     "@types/swagger-ui-express": "^4.1.8",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "swagger-jsdoc": "^6.2.8",
