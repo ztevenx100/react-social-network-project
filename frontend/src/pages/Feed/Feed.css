@@ -27,6 +27,15 @@
   margin-bottom: 1rem;
   font-size: 1.1rem;
   color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.post-author-alias {
+  font-size: 0.9rem;
+  color: #777;
+  font-weight: normal;
 }
 
 .post-content {
@@ -39,6 +48,8 @@
 .post-actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center; /* Alinear botones verticalmente */
+  gap: 0.5rem; /* Espacio entre botones */
 }
 
 .like-button {
@@ -55,3 +66,135 @@
 .like-button:hover {
   background-color: #e4e6eb;
 }
+
+.delete-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #d9363e;
+}
+
+/* Estilos para el formulario de creación de posts */
+.create-post-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.create-post-form h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.create-post-form input[type="text"],
+.create-post-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.create-post-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.submit-post-button {
+  background-color: #6e8efb;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+  display: block;
+  width: 100%;
+}
+
+.submit-post-button:hover {
+  background-color: #5a78e6;
+}
+
+.edit-button {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.edit-button:hover {
+  background-color: #096dd9;
+}
+
+/* --- Estilos del Modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-actions .cancel-button {
+  background-color: #f0f2f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+.modal-actions .cancel-button:hover {
+  background-color: #e4e6eb;
+}
+/* ----------------------- */

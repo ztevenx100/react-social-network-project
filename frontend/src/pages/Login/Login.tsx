@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import apiClient from '../../api/apiClient';
 import { useAuthStore } from '../../store/auth.store';
 import './Login.css';
 
@@ -8,7 +9,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { setToken } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,15 +17,18 @@ const Login: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', {
+      const response = await apiClient.post<{ token: string }>('/auth/login', {
         email,
         password,
       });
+      const token = response.data.token;
+      setToken(token);
 
-      if (response.data.token) {
-        setToken(response.data.token);
-        navigate('/profile'); // Redirigir al perfil
-      }
+      // Después de obtener el token, pedimos el perfil del usuario
+      const profileResponse = await apiClient.get('/auth/profile');
+      setUser(profileResponse.data); // <-- Guardamos el perfil en el store
+
+      navigate('/profile'); // Redirigir al perfil
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setError(err.response.data.message || 'Error al iniciar sesión');
