@@ -33,6 +33,11 @@ const Profile: React.FC = () => {
     fetchProfile();
   }, []); // El array vacío asegura que se ejecute solo una vez
 
+  // Función para obtener las iniciales del usuario
+  const getInitials = (name: string, lastname: string) => {
+    return `${name.charAt(0)}${lastname.charAt(0)}`.toUpperCase();
+  };
+
   if (loading) {
     return <div className="profile-container">Cargando perfil...</div>;
   }
@@ -48,12 +53,18 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <div className="profile-card">
-        <h1>Perfil de Usuario</h1>
+        <div className="profile-header">
+          <div className="profile-avatar">
+            <span>{getInitials(userData.name, userData.lastname)}</span>
+          </div>
+          <div className="profile-info">
+            <h1 className="profile-name">{userData.name} {userData.lastname}</h1>
+            <p className="profile-alias">@{userData.alias}</p>
+          </div>
+        </div>
         <div className="profile-details">
-          <p><strong>Nombre:</strong> {userData.name}</p>
-          <p><strong>Apellido:</strong> {userData.lastname}</p>
-          <p><strong>Alias:</strong> {userData.alias}</p>
           <p><strong>Fecha de Nacimiento:</strong> {new Date(userData.birthdate).toLocaleDateString()}</p>
+          {/* Puedes añadir más detalles aquí en el futuro */}
         </div>
       </div>
     </div>

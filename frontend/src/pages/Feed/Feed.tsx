@@ -1,77 +1,75 @@
-interface Post {
-  id: number;
-  author: string;
-  avatar: string;
-  content: string;
-  image?: string;
-  likes: number;
-  comments: number;
-  timestamp: string;
+import React, { useEffect, useState } from 'react';
+import apiClient from '../../api/apiClient';
+import './Feed.css';
+
+// Interfaces para tipar los datos que vienen del backend
+interface Author {
+  name: string;
+  lastname: string;
 }
 
-const Feed = () => {
-  const posts: Post[] = [
-    {
-      id: 1,
-      author: 'Jane Smith',
-      avatar: 'https://via.placeholder.com/50',
-      content: 'Just finished my new React project! Check it out.',
-      image: 'https://via.placeholder.com/500x300',
-      likes: 42,
-      comments: 8,
-      timestamp: '2 hours ago'
-    },
-    {
-      id: 2,
-      author: 'John Doe',
-      avatar: 'https://via.placeholder.com/50',
-      content: 'Learning TypeScript has been a game changer for my development workflow.',
-      likes: 28,
-      comments: 5,
-      timestamp: '5 hours ago'
-    },
-    {
-      id: 3,
-      author: 'Sarah Johnson',
-      avatar: 'https://via.placeholder.com/50',
-      content: 'Beautiful day for coding outside! #devlife',
-      image: 'https://via.placeholder.com/500x300',
-      likes: 76,
-      comments: 12,
-      timestamp: '1 day ago'
+interface Post {
+  id: number;
+  content: string;
+  author: Author;
+  likes: number;
+}
+
+const Feed: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Obtener los posts del backend
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.get<Post[]>('/posts');
+        setPosts(response.data);
+        setError(null);
+      } catch (err) {
+        setError('No se pudieron cargar las publicaciones.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  // Función para dar like a un post
+  const handleLike = async (postId: number) => {
+    try {
+      const response = await apiClient.patch<Post>(`/posts/${postId}/like`);
+      // Actualizar el estado local con el nuevo número de likes
+      setPosts(posts.map(post => 
+        post.id === postId ? { ...post, likes: response.data.likes } : post
+      ));
+    } catch (err) {
+      console.error('Error al dar like:', err);
+      // Opcional: mostrar un error al usuario
     }
-  ];
+  };
+
+  if (loading) return <div className="feed-container">Cargando publicaciones...</div>;
+  if (error) return <div className="feed-container error-message">{error}</div>;
 
   return (
-    <div className="feed-page">
-      <h1>News Feed</h1>
-      
-      <div className="create-post">
-        <textarea placeholder="What's on your mind?"></textarea>
-        <button>Post</button>
-      </div>
-      
-      <div className="posts-container">
+    <div className="feed-container">
+      <h1>Últimas Publicaciones</h1>
+      <div className="posts-list">
         {posts.map(post => (
-          <div key={post.id} className="post">
-            <div className="post-header">
-              <img src={post.avatar} alt={post.author} className="avatar" />
-              <div>
-                <h3>{post.author}</h3>
-                <span className="timestamp">{post.timestamp}</span>
-              </div>
+          <div key={post.id} className="post-card">
+            <div className="post-author">
+              <strong>{post.author.name} {post.author.lastname}</strong>
             </div>
-            
             <p className="post-content">{post.content}</p>
-            
-            {post.image && (
-              <img src={post.image} alt="Post" className="post-image" />
-            )}
-            
             <div className="post-actions">
-              <button>❤️ {post.likes}</button>
-              <button>💬 {post.comments}</button>
-              <button>📤 Share</button>
+              <button onClick={() => handleLike(post.id)} className="like-button">
+                ❤️ Me gusta ({post.likes})
+              </button>
             </div>
           </div>
         ))}
