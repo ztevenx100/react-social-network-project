@@ -1,4 +1,5 @@
 # React Social Network Project
+## Pruebas técnicas - Periferia IT Group
 
 Este proyecto es una aplicación full-stack de una red social simple, diseñada con una arquitectura moderna y desacoplada de cliente-servidor.
 
@@ -113,3 +114,50 @@ La API base se encuentra en `/api`.
 -   `npm start`: Inicia el servidor en modo producción (requiere `npm run build` primero).
 -   `npm run lint`: Ejecuta el linter para detectar errores.
 -   `npm test`: Ejecuta las pruebas automatizadas con Jest.
+
+### Configuración Adicional
+
+Para la configuración de TypeScript, Prisma y otras herramientas, consulta los archivos de configuración en las carpetas `backend` y `frontend`. Asegúrate de tener instaladas las dependencias necesarias globalmente si deseas ejecutar comandos como `ts-node` o `prisma` desde la línea de comandos.
+
+#### Ejemplo de configuración de `package.json` en el backend:
+
+```json
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "scripts": {
+    "dev": "ts-node-dev src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.6.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.4.11",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.34"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.12",
+    "@types/dotenv": "^10.0.3",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "jest": "^27.0.6",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.4"
+  }
+}
+```
