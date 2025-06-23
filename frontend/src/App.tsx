@@ -12,7 +12,7 @@ const Feed = lazy(() => import('./pages/Feed/Feed'));
 
 // Componente que contiene el layout y la lógica de navegación
 const AppLayout = () => {
-  const { token, logout } = useAuthStore();
+  const { token, user, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,12 +23,22 @@ const AppLayout = () => {
   return (
     <div className="app-container">
       <nav className="main-navigation">
-        <ul>
+        {/* Links de la izquierda */}
+        <ul className="nav-links-left">
           <li><Link to="/">Home</Link></li>
-          {token ? (
+          {token && (
             <>
               <li><Link to="/profile">Profile</Link></li>
               <li><Link to="/feed">Feed</Link></li>
+            </>
+          )}
+        </ul>
+
+        {/* Sección del usuario a la derecha */}
+        <ul className="nav-links-right">
+          {token && user ? (
+            <>
+              <li className="user-greeting"><span>Hola, @{user.alias}</span></li>
               <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
             </>
           ) : (

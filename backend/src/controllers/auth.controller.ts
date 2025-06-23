@@ -60,6 +60,7 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<void>
     const user = await client.user.findUnique({
       where: { id: userId },
       select: {
+        id: true,
         name: true,
         lastname: true,
         birthdate: true,

@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import {
   createPost,
-  getPosts,
+  getAllPosts,
   likePost,
+  deletePost,
 } from '../controllers/posts.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
@@ -15,9 +16,12 @@ router.use(authMiddleware);
 router.post('/', createPost);
 
 // GET /api/posts -> Listar todas las publicaciones de otros usuarios
-router.get('/', getPosts);
+router.get('/', getAllPosts);
 
 // PATCH /api/posts/:id/like -> Dar like a una publicación
 router.patch('/:id/like', likePost);
+
+// DELETE /api/posts/:id -> Eliminar una publicación
+router.delete('/:id', deletePost);
 
 export default router;
