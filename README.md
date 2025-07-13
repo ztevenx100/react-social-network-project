@@ -1,5 +1,6 @@
 # React Social Network Project
 ## Pruebas técnicas - Periferia IT Group
+Autor: Pedro Castiblanco
 
 Este proyecto es una aplicación full-stack de una red social simple, diseñada con una arquitectura moderna y desacoplada de cliente-servidor.
 
